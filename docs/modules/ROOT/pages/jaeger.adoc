@@ -14,6 +14,10 @@ Jaeger can be deployed either as all-in-one binary, where all Jaeger backend com
 * Collectors are writing directly to storage.
 * Collectors are writing to Kafka as a preliminary buffer
 
-.Jaeger Architecture
+.Illustration of direct-to-storage architecture
 
 image::architecture-v1.png[]
+
+.Illustration of architecture with Kafka as intermediate buffer
+
+image::architecture-v2.png[]

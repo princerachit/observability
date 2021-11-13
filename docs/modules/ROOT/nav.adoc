@@ -9,7 +9,7 @@
 
 .Deployment
 * xref:deployment-onpremise.adoc[On-premise deployment]
-* xref:jaeger.adoc[jaeger]
+* xref:jaeger.adoc[Jaeger]
 
 .Tutorials
 * xref:tutorial-onpremise.adoc[On-premise example]

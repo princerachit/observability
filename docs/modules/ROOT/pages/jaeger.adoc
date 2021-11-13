@@ -1,0 +1,19 @@
+= Jaeger
+
+Jaeger, inspired by Dapper and OpenZipkin, is a distributed tracing system released as open source by Uber Technologies. It is used for monitoring and troubleshooting microservices-based distributed systems, including:
+
+* Distributed context propagation
+* Distributed transaction monitoring
+* Root cause analysis
+* Service dependency analysis
+* Performance / latency optimization
+
+= Components
+Jaeger can be deployed either as all-in-one binary, where all Jaeger backend components run in a single process, or as a scalable distributed system, discussed below. There are two main deployment options:
+
+* Collectors are writing directly to storage.
+* Collectors are writing to Kafka as a preliminary buffer
+
+.Jaeger Architecture
+
+image::architecture-v1.png[]

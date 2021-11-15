@@ -1,0 +1,128 @@
+= Jaeger
+
+Jaeger, inspired by Dapper and OpenZipkin, is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems, including:Distributed context propagation
+, Distributed transaction monitoring, Root cause analysis, Service dependency analysis and Performance / latency optimization
+
+= Overview
+Jaeger can be deployed either as all-in-one binary, where all Jaeger backend components run in a single process, or as a scalable distributed system, discussed below. There are two main deployment options:
+
+* Collectors are writing directly to storage.
+* Collectors are writing to Kafka as a preliminary buffer
+
+.Illustration of direct-to-storage architecture
+
+image::architecture-v1.png[]
+
+.Illustration of architecture with Kafka as intermediate buffer
+
+image::architecture-v2.png[]
+
+= Getting Started
+
+Instrumentation
+
+Your applications must be instrumented before they can send tracing data to Jaeger backend. Check the Client Libraries section for information about how to use the OpenTracing API and how to initialize and configure Jaeger tracers.
+
+= All in One
+
+All-in-one is an executable designed for quick local testing, launches the Jaeger UI, collector, query, and agent, with an in memory storage component.
+
+The simplest way to start the all-in-one is to use the pre-built image published to DockerHub (a single command line).
+
+
+    docker run -d --name jaeger \
+        -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 \
+        -p 5775:5775/udp \
+        -p 6831:6831/udp \
+        -p 6832:6832/udp \
+        -p 5778:5778 \
+        -p 16686:16686 \
+        -p 14268:14268 \
+        -p 14250:14250 \
+        -p 9411:9411 \
+         jaegertracing/all-in-one:1.28
+
+Or run the jaeger-all-in-one(.exe) executable from the binary distribution archives:
+
+
+    jaeger-all-in-one --collector.zipkin.host-port=:9411
+
+You can then navigate to http://localhost:16686 to access the Jaeger UI.
+
+The container exposes the following ports:
+
+Port	Protocol	Component	Function
+5775	UDP	agent	accept zipkin.thrift over compact thrift protocol (deprecated, used by legacy clients only)
+6831	UDP	agent	accept jaeger.thrift over compact thrift protocol
+6832	UDP	agent	accept jaeger.thrift over binary thrift protocol
+5778	HTTP	agent	serve configs
+16686	HTTP	query	serve frontend
+14268	HTTP	collector	accept jaeger.thrift directly from clients
+14250	HTTP	collector	accept model.proto
+9411	HTTP	collector	Zipkin compatible endpoint (optional)
+
+= Kubernetes and OpenShift
+
+* Kubernetes templates: https://github.com/jaegertracing/jaeger-kubernetes
+* Kubernetes Operator: https://github.com/jaegertracing/jaeger-operator
+* OpenShift templates: https://github.com/jaegertracing/jaeger-openshift
+
+= Sample App: HotROD
+HotROD (Rides on Demand) is a demo application that consists of several microservices and illustrates the use of the OpenTracing API. A tutorial / walkthrough is available in the blog post: Take OpenTracing for a HotROD ride.
+
+It can be run standalone, but requires Jaeger backend to view the traces.
+
+= Features
+
+* Discover architecture of the whole system via data-driven dependency diagram.
+
+* View request timeline and errors; understand how the app works.
+
+* Find sources of latency and lack of concurrency.
+
+* Highly contextualized logging.
+
+* Use baggage propagation to:
+
+    * Diagnose inter-request contention (queueing).
+    * Attribute time spent in a service.
+
+* Use open source libraries with OpenTracing integration to get vendor-neutral instrumentation for free.
+
+= Prerequisites
+
+    * You need Go toolchain installed on your machine to run from source (see go.mod file for required Go version).
+    * Requires a running Jaeger backend to view the traces.
+
+= Running
+
+From Source
+
+    mkdir -p $GOPATH/src/github.com/jaegertracing
+    cd $GOPATH/src/github.com/jaegertracing
+    git clone git@github.com:jaegertracing/jaeger.git jaeger
+    cd jaeger
+    go run ./examples/hotrod/main.go all
+
+From docker
+
+    docker run --rm -it \
+    --link jaeger \
+    -p8080-8083:8080-8083 \
+    -e JAEGER_AGENT_HOST="jaeger" \
+    jaegertracing/example-hotrod:1.28 \
+    all
+
+From binary distribution
+
+Run example-hotrod(.exe) executable from the binary distribution archives:
+
+    example-hotrod all
+
+Then navigate to http://localhost:8080.
+
+= Migrating from Zipkin
+
+Collector service exposes Zipkin compatible REST API /api/v1/spans which accepts both Thrift and JSON. Also there is /api/v2/spans for JSON and Proto. By default it’s disabled. It can be enabled with --collector.zipkin.host-port=:9411.
+
+Zipkin Thrift IDL and Zipkin Proto IDL files can be found in jaegertracing/jaeger-idl repository. They’re compatible with openzipkin/zipkin-api Thrift and Proto.

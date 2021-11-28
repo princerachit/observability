@@ -75,39 +75,6 @@
   </li>
   <li class="nav-item" data-depth="0">
     <button class="nav-item-toggle"></button>
-    <span class="nav-text">Configuration</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <span class="nav-text"><a href="http://localhost:8080/promwebform.html" target="_blank" rel="noopener">Add Cluster</a></span>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <span class="nav-text"><a href="http://localhost:8080/prometheus/alerts/" target="_blank" rel="noopener">Prometheus Alerts</a></span>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <span class="nav-text"><a href="http://localhost:8080/prometheus/rules/" target="_blank" rel="noopener">Prometheus Rules</a></span>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <span class="nav-text"><a href="http://localhost:8080/prometheus/targets/" target="_blank" rel="noopener">Prometheus Targets</a></span>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">Tooling</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="1">
-    <span class="nav-text"><a href="http://localhost:8080/alertmanager/" target="_blank" rel="noopener">Alert Manager</a></span>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <span class="nav-text"><a href="http://localhost:8080/grafana/" target="_blank" rel="noopener">Grafana</a></span>
-  </li>
-  <li class="nav-item" data-depth="1">
-    <span class="nav-text"><a href="http://localhost:8080/prometheus/" target="_blank" rel="noopener">Prometheus</a></span>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="0">
-    <button class="nav-item-toggle"></button>
     <span class="nav-text">Architecture</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
@@ -121,6 +88,15 @@
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Components</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="component-loki.html">Loki</a>
   </li>
 </ul>
   </li>
@@ -211,6 +187,40 @@
 </div>
 <div class="paragraph">
 <p>No official support is currently provided but best efforts will be made and we are keen to hear of any issues.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_diagnostics"><a class="anchor" href="#_diagnostics"></a>Diagnostics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All components of CMOS log their output to <code>/logs/&lt;component&gt;.log</code> inside the container.
+By default, they will also log to standard output, which you can access using <code>docker logs</code>, <code>kubectl logs</code>, or similar.
+This can be disabled by setting the environment variable <code>LOG_TO_STDOUT</code> to <code>false</code> when starting CMOS.</p>
+</div>
+<div class="sect2">
+<h3 id="_collecting_information"><a class="anchor" href="#_collecting_information"></a>Collecting Information</h3>
+<div class="paragraph">
+<p>If the CMOS web server is enabled, visit <code>/collect-info.html</code> to create a tar-ball of all CMOS logs and configuration.
+If you cannot access the web server or it is disabled, the same can be done by running <code>/collect-information.sh</code> in the container.
+The output will be saved to <code>/tmp/support</code> in the container.
+If the web server is enabled, it can also be accessed on <code>/support</code>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>At the time of writing, no redaction or sanitization is performed on the output, and it is likely that it will include passwords or other credentials.
+We recommend inspecting the generated output before uploading it to Couchbase for review.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>

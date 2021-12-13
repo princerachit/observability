@@ -1,0 +1,13 @@
+= Grafana
+
+== Overview
+
+xref:https://grafana.com/ [Grafana] is a multi-platform open source analytics and interactive visualization web application. It allows you to query, visualize, alert on, and explore your metrics, logs, and traces no matter where they are stored. It provides you with tools to turn your time-series database (TSDB) data into insightful graphs and visualizations to create an user-customizable dashboards.
+Dashboards can be pretty specific to what you as a user care about, so you’ll want to customise accordingly.  If you want a starting point, there are a few sample Grafana dashboards in the couchbase-exporter GitHub repo which will be improved over time.  
+
+
+
+
+== Get Started
+* xref:architecture.adoc[Learn]
+* xref:https://blog.couchbase.com/how-to-build-observability-dashboards-prometheus-grafana-couchbase/[Tutorial]
